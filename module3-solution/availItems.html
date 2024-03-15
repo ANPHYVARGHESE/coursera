@@ -1,0 +1,7 @@
+<div class="error" ng-hide="items.length">Nothing found</div>
+<ul ng-repeat="item in items" class="ng-scope">
+    <li class="ng-binding">{{item.name}}</li>
+    <li class="ng-binding">{{item.short_name}}</li>
+    <li class="ng-binding">{{item.description}}</li>
+    <button ng-click="onRemove({index: $index});" style="background-color: rgb(233, 116, 81); margin: 20px; height: 30px;">Don't want this one!</button>
+  </ul>

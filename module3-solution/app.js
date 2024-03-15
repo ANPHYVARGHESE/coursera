@@ -2,7 +2,7 @@
   'use strict';
 
   angular.module('NarrowItDownApp', [])
-  .controller('NarrowItDownController', NarrowItDownController)
+  .controller('SearchController', SearchController)
   .service('MenuSearchService', MenuSearchService)
   .constant('ApiBasePath', "https://coursera-jhu-default-rtdb.firebaseio.com")
   .directive('foundItems', FoundItemsDirective);
@@ -19,29 +19,29 @@
   }
 
 
-  NarrowItDownController.$inject = ['MenuSearchService'];
-  function NarrowItDownController(MenuSearchService) {
-    var narrowCtrl = this;
-    narrowCtrl.searchTerm = '';
-    narrowCtrl.found = [];
+  SearchController.$inject = ['MenuSearchService'];
+  function SearchController(MenuSearchService) {
+    var searchCtrl = this;
+    searchCtrl.searchTerm = '';
+    searchCtrl.found = [];
 
-    narrowCtrl.search = function () {
-      narrowCtrl.found = [];
-      if (narrowCtrl.searchTerm.trim() != "") {
-          var promise = MenuSearchService.getMatchedMenuItems(narrowCtrl.searchTerm);
+    searchCtrl.search = function () {
+      searchCtrl.found = [];
+      if (searchCtrl.searchTerm.trim() != "") {
+          var promise = MenuSearchService.getMatchedMenuItems(searchCtrl.searchTerm);
           promise.then(function (result) {
-              narrowCtrl.found = result;
+              searchCtrl.found = result;
               console.log(result);
           })
           .catch(function (error) {
               console.log("Something went wrong: " + error);
-			  narrowCtrl.search = "Nothing found 2";
+			  searchCtrl.search = "Nothing found 2";
           });
       }
     }
 
-    narrowCtrl.remove = function (index) {
-      narrowCtrl.found.splice(index, 1);
+    searchCtrl.remove = function (index) {
+      searchCtrl.found.splice(index, 1);
     }
 
   }

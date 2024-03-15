@@ -8,22 +8,21 @@
     <script src="angular.min.js"></script>
     <script src="app.js"></script>
   </head>
-<body ng-controller='NarrowItDownController as narrowCtrl'>
+<body ng-controller='SearchController as searchCtrl'>
    <div class="container sp-card">
     <h1>Narrow Down Your Chinese Menu Choice</h1>
     <hr/>
     <div class="form-group">
-      <input ng-model="narrowCtrl.searchTerm" type="text" placeholder="Enter your favourite" class="form-control">
+      <input ng-model="searchCtrl.searchTerm" type="text" placeholder="Enter your favourite" class="form-control">
     </div>
     <div class="form-group narrow-button">
-      <button ng-click="narrowCtrl.search()" class="btn btn-primary">Narrow It Down For Me!</button>
+      <button ng-click="searchCtrl.search()" class="btn btn-primary">Narrow It Down For Me!</button>
     </div>
   </div>
 
   <div class="container sp-card">
-    <found-items items="narrowCtrl.found" on-remove="narrowCtrl.remove(index)">
+    <found-items items="searchCtrl.found" on-remove="searchCtrl.remove(index)">
     </found-items>
   </div>
 </body>
 </html>
-

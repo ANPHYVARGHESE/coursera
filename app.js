@@ -1,74 +1,53 @@
-(function () {
-  'use strict';
+(
+  function(){
+      var app = angular.module('menuApp', ['ui.router'])
+      .constant('baseUrl', 'https://coursera-jhu-default-rtdb.firebaseio.com/menu_items.json')
+      .config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
+          $stateProvider
+            .state('home', {
+              url: '/',
+              templateUrl: 'directives/home.directive.html',
+              controller: 'HomeController as homeCtrl'
+            })
+            .state('categories', {
+              url: '/categories',
+              templateUrl: 'directives/category.directive.html',
+              controller: 'CategoryController as catCtrl',
+              resolve: {
+                resData: ['DataService', function(DataService) {
+                  return DataService.getData();
+                }]
+              }
+            })
+            .state('categories.items', {
+              // url: '/items/{id}',
+              templateUrl: 'directives/item.directive.html',
+              controller: 'ItemController as itemCtrl',
+              params: {
+                id: null
+              }
+            });
 
-  angular.module('NarrowItDownApp', [])
-  .controller('SearchController', SearchController)
-  .service('MenuSearchService', MenuSearchService)
-  .constant('ApiBasePath', "https://coursera-jhu-default-rtdb.firebaseio.com")
-  .directive('foundItems', FoundItemsDirective);
+          $urlRouterProvider.otherwise('/');
+        })
+        .run(function ($rootScope, $transitions) {
+          // Initialize spinner
+          $rootScope.showSpinner = false;
 
-  function FoundItemsDirective() {
-      var ddo = {
-          templateUrl: 'availItems.html',
-          scope: {
-              items: '<',
-              onRemove: '&'
-          }
-      };
-      return ddo;
-  }
-
-
-  SearchController.$inject = ['MenuSearchService'];
-  function SearchController(MenuSearchService) {
-    var searchCtrl = this;
-    searchCtrl.searchTerm = '';
-    searchCtrl.found = [];
-
-    searchCtrl.search = function () {
-      searchCtrl.found = [];
-      if (searchCtrl.searchTerm.trim() != "") {
-          var promise = MenuSearchService.getMatchedMenuItems(searchCtrl.searchTerm);
-          promise.then(function (result) {
-              searchCtrl.found = result;
-              console.log(result);
-          })
-          .catch(function (error) {
-              console.log("Something went wrong: " + error);
-			  searchCtrl.search = "Nothing found 2";
+          // Show spinner during state transition start
+          $transitions.onStart({}, function () {
+            $rootScope.showSpinner = true;
           });
-      }
-    }
 
-    searchCtrl.remove = function (index) {
-      searchCtrl.found.splice(index, 1);
-    }
+          // Hide spinner after state transition success or error
+          $transitions.onSuccess({}, function () {
+            $rootScope.showSpinner = false;
+          });
 
-  }
-
-
-  MenuSearchService.$inject = ['$http', 'ApiBasePath'];
-  function MenuSearchService($http, ApiBasePath) {
-    var service = this;
-
-    service.getMatchedMenuItems = function (searchTerm) {
-      var response = $http({
-        method: "GET",
-        url: (ApiBasePath + "/menu_items.json")
-      });
-
-      return response.then(function (result) {
-          var searchItems = [];
-          var data = result.data;
-
-          for (var category in data) {
-              searchItems.push( data[category].menu_items.filter( item => item.description.toLowerCase().includes(searchTerm.toLowerCase()) )
-              );
-          }
-          return searchItems.flat();
-      });
-    };
+          $transitions.onError({}, function () {
+            $rootScope.showSpinner = false;
+          });
+        })
 
   }
-
-  })();
+)()

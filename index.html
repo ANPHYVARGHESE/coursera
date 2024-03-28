@@ -1,28 +1,55 @@
-<!doctype html>
-<html ng-app="NarrowItDownApp" lang="en">
+
+<!DOCTYPE html>
+<html lang="en" ng-app="menuApp">
   <head>
-    <title>Narrow Down Your Menu Choice</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles/bootstrap.min.css">
-    <link rel="stylesheet" href="styles/styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Restaurant App</title>
+    <link rel="stylesheet" href="styles/bootstrap.min.css" />
     <script src="angular.min.js"></script>
     <script src="app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.1.0/angular-ui-router.js"></script>
+    <script src="services/data.service.js"></script>
+    <script src="controllers/home.controller.js"></script>
+    <script src="controllers/category.controller.js"></script>
+    <script src="controllers/item.controller.js"></script>
   </head>
-<body ng-controller='SearchController as searchCtrl'>
-   <div class="container sp-card">
-    <h1>Narrow Down Your Chinese Menu Choice</h1>
-    <hr/>
-    <div class="form-group">
-      <input ng-model="searchCtrl.searchTerm" type="text" placeholder="Enter your favourite" class="form-control">
-    </div>
-    <div class="form-group narrow-button">
-      <button ng-click="searchCtrl.search()" class="btn btn-primary">Narrow It Down For Me!</button>
-    </div>
-  </div>
+  <body>
+      <nav
+      class="navbar navbar-expand-sm   w-100 top-0"
+      style="z-index: 100"
+    >
+      
+      <button
+        class="navbar-toggler d-lg-none"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#collapsibleNavId"
+        aria-controls="collapsibleNavId"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      ></button>
+      <div class="collapse navbar-collapse" id="collapsibleNavId">
+        <ul class="navbar-nav me-auto mt-2 mt-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" ui-sref="home" ui-sref-active="active" aria-current="page" href="#!/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" ui-sref="categories" ui-sref-active="active" href="#!/categories">Categories</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
 
-  <div class="container sp-card">
-    <found-items items="searchCtrl.found" on-remove="searchCtrl.remove(index)">
-    </found-items>
+
+  <div class="container-fluid p-4">
+    <div class="d-flex justify-content-center align-items-center mt-5" ng-if="showSpinner">
+      <div class="spinner-border text-secondary spinner-border-sm p-4" role="status"></div>
+    </div>
+
+    <div class="mt-5">
+      <ui-view ng-hide="showSpinner"></ui-view>
+    </div>
   </div>
-</body>
+  </body>
 </html>

@@ -1,0 +1,24 @@
+
+<div class="ng-scope">
+    <ul>
+      <div class="row mt-5">
+        <div class="col-md-3">
+          <div class="position-fixed">
+
+
+
+                    <h3 >Please see our menu </h3>
+  <li ng-repeat="item in catCtrl.categories" style="list-style: none" >
+<a ui-sref="categories.items({id:$index})" href="#!/categories">
+   {{item.category.name}}</a>
+   </li>
+
+
+</div>
+
+</div>
+<ui-view></ui-view>
+</div>
+  </ul>
+
+  </div>
